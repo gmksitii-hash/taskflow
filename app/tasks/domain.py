@@ -52,3 +52,13 @@ class TaskService:
 
     def list_tasks(self) -> list[Task]:
         return list(self._tasks)
+
+
+
+
+    def update_status(self, task_id: int, new_status: TaskStatus) -> Task:
+        for task in self._tasks:
+            if task.id == task_id:
+                task.status = new_status
+                return task
+        raise TaskValidationError(f"Завдання з ID {task_id} не знайдено.")
