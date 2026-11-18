@@ -39,3 +39,16 @@ def create_task_endpoint(payload: TaskCreateRequest) -> Task:
 @router.get("", response_model=list[TaskResponse])
 def get_tasks_endpoint() -> list[Task]:
     return task_service.list_tasks()
+class TaskStatusUpdate(BaseModel):
+    status: TaskStatus
+
+
+@router.patch("/{task_id}/status", response_model=TaskResponse)
+def update_task_status_endpoint(task_id: int, payload: TaskStatusUpdate) -> Task:
+    try:
+        return task_service.update_status(task_id=task_id, new_status=payload.status)
+    except TaskValidationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(exc),
+        ) from exc
