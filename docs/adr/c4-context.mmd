@@ -1,0 +1,26 @@
+flowchart TB
+    Admin["<b>Адміністратор команди</b><br/>(Власник команди, керує тарифом і доступами)"]
+    Member["<b>Учасник команди</b><br/>(Співробітник агенції, ІТ-спеціаліст, водій)"]
+    Guest["<b>Гість (Клієнт)</b><br/>(Переглядає дошку в режимі читання)"]
+    ExtSys["<b>Зовнішня система звітності</b><br/>(Клієнтські BI/CRM системи)"]
+
+    TaskFlow["<b>Система «ТаскФлоу»</b><br/>Хмарний сервіс керування завданнями<br/>(Хостинг у межах ЄС)"]
+
+    EmailSvc["<b>Зовнішній поштовий сервіс</b><br/>(Наприклад, SendGrid / Amazon SES EU)"]
+    GCal["<b>Google Calendar API</b><br/>(Зовнішній календарний сервіс)"]
+
+    Admin -->|"Керує командою, тарифами та правами (HTTPS)"| TaskFlow
+    Member -->|"Створює та оновлює завдання онлайн/офлайн (HTTPS)"| TaskFlow
+    Guest -->|"Переглядає дошку проєкту (HTTPS)"| TaskFlow
+    ExtSys -->|"Отримує дані завдань (REST API / JSON)"| TaskFlow
+
+    TaskFlow -->|"Надсилає email-нагадування та запрошення (SMTP / HTTPS)"| EmailSvc
+    TaskFlow <-->|"Синхронізує дедлайни завдань (HTTPS / OAuth 2.0)"| GCal
+
+    style TaskFlow fill:#1168bd,color:#ffffff,stroke:#0b4884
+    style Admin fill:#08427b,color:#ffffff
+    style Member fill:#08427b,color:#ffffff
+    style Guest fill:#08427b,color:#ffffff
+    style ExtSys fill:#999999,color:#ffffff
+    style EmailSvc fill:#999999,color:#ffffff
+    style GCal fill:#999999,color:#ffffff
